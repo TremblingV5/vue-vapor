@@ -126,7 +126,10 @@ export function generate(
   )
 
   if (inline) {
-    push(`((${signature}) => {`)
+    // In inline mode, identifiers are already resolved without _ctx prefix
+    // (see genIdentifier in expression.ts), so the IIFE wrapper is unnecessary.
+    // We only need a bare block to scope declarations.
+    push('{')
   } else {
     push(NEWLINE, `export function ${functionName}(${signature}) {`)
   }
@@ -136,7 +139,7 @@ export function generate(
   push(INDENT_END, NEWLINE)
 
   if (inline) {
-    push('})()')
+    push('}')
   } else {
     push('}')
   }
